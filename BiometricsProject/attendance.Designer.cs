@@ -56,7 +56,7 @@ namespace BiometricsProject
             this.lblScanMessage.BackColor = System.Drawing.Color.Transparent;
             this.lblScanMessage.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblScanMessage.ForeColor = System.Drawing.Color.Black;
-            this.lblScanMessage.Location = new System.Drawing.Point(392, 230);
+            this.lblScanMessage.Location = new System.Drawing.Point(392, 237);
             this.lblScanMessage.Name = "lblScanMessage";
             this.lblScanMessage.Size = new System.Drawing.Size(267, 21);
             this.lblScanMessage.TabIndex = 2;
