@@ -178,6 +178,12 @@
     <Compile Include="EnrollControlWrapper.Designer.cs">
       <DependentUpon>EnrollControlWrapper.cs</DependentUpon>
     </Compile>
+    <Compile Include="HomeControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="HomeControl.Designer.cs">
+      <DependentUpon>HomeControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="main.cs">
       <SubType>Form</SubType>
     </Compile>

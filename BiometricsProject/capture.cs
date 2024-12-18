@@ -1,58 +1,44 @@
 ﻿using DPFP;
 using DPFP.Capture;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace BiometricsProject
 {
     public partial class capture : Form, DPFP.Capture.EventHandler
     {
-
         private DPFP.Capture.Capture Capturer;
         public string FirstName = "";
         public string UserID = "";
+        private bool isScanning = false; // Flag to track scan state
 
         public capture()
         {
             InitializeComponent();
         }
 
+        // Set the text for the prompt label safely
         protected void SetPrompt(string prompt)
         {
-            this.Invoke(new Function(delegate ()
+            if (Prompt.InvokeRequired)
+            {
+                Prompt.Invoke(new Action(() => Prompt.Text = prompt));
+            }
+            else
             {
                 Prompt.Text = prompt;
-            }));
+            }
         }
 
-        /*
-        protected void SetStatus(string status)
-        {
-            this.Invoke(new Function(delegate ()
-            {
-                StatusLabel.Text = status;
-
-            }));
-        }
-        */
-
+        // Set the text for the status label safely
         protected void SetStatus(string status)
         {
             if (StatusLabel.InvokeRequired)
             {
                 if (StatusLabel.IsHandleCreated)
                 {
-                    this.Invoke(new Action(() =>
-                    {
-                        StatusLabel.Text = status;
-                    }));
+                    StatusLabel.Invoke(new Action(() => StatusLabel.Text = status));
                 }
             }
             else
@@ -61,61 +47,73 @@ namespace BiometricsProject
             }
         }
 
-
+        // Draw the fingerprint image safely
         private void DrawPicture(Bitmap bitmap)
         {
-            this.Invoke(new Function(delegate ()
+            if (fImage.InvokeRequired)
+            {
+                fImage.Invoke(new Action(() => fImage.Image = new Bitmap(bitmap, fImage.Size)));
+            }
+            else
             {
                 fImage.Image = new Bitmap(bitmap, fImage.Size);
-            }));
+            }
         }
 
-
+        // Update First Name text box
         protected void Setfname(string value)
         {
-            this.Invoke(new Function(delegate ()
+            if (fname.InvokeRequired)
+            {
+                fname.Invoke(new Action(() => fname.Text = value));
+            }
+            else
             {
                 fname.Text = value;
-            }));
+            }
         }
 
+        // Update User ID text box
         protected void SetUserID(string value)
         {
-            this.Invoke(new Function(delegate ()
+            if (userid.InvokeRequired)
+            {
+                userid.Invoke(new Action(() => userid.Text = value));
+            }
+            else
             {
                 userid.Text = value;
-            }));
+            }
         }
 
-
+        // Initialize the fingerprint capture process
         protected virtual void Init()
         {
             try
             {
                 Capturer = new DPFP.Capture.Capture();
-                if (null != Capturer) 
-                { 
+                if (Capturer != null)
+                {
                     Capturer.EventHandler = this;
-                } 
+                }
                 else
                 {
                     SetPrompt("Can't Initiate Capture Operation");
                 }
-            }catch{
+            }
+            catch
+            {
                 MessageBox.Show("Can't Initiate Capture Operation");
             }
         }
 
-
-        //Process
-
+        // Process a sample and draw the fingerprint image
         protected virtual void Process(DPFP.Sample Sample)
         {
             DrawPicture(ConvertSampleToBitmap(Sample));
         }
 
-        
-
+        // Convert fingerprint sample to a Bitmap
         protected Bitmap ConvertSampleToBitmap(DPFP.Sample Sample)
         {
             DPFP.Capture.SampleConversion Convertor = new DPFP.Capture.SampleConversion();
@@ -124,9 +122,10 @@ namespace BiometricsProject
             return bitmap;
         }
 
+        // Start fingerprint capture
         protected void Start()
         {
-            if (null != Capturer)
+            if (Capturer != null)
             {
                 try
                 {
@@ -135,14 +134,15 @@ namespace BiometricsProject
                 }
                 catch
                 {
-                    SetPrompt("can't initiate capture.");
+                    SetPrompt("Can't initiate capture.");
                 }
             }
         }
 
+        // Stop fingerprint capture
         protected void Stop()
         {
-            if (null != Capturer)
+            if (Capturer != null)
             {
                 try
                 {
@@ -152,41 +152,40 @@ namespace BiometricsProject
                 }
                 catch
                 {
-                    SetPrompt("can't terminate capture.");
+                    SetPrompt("Can't terminate capture.");
                 }
             }
         }
 
-
-
+        // Append a message to the status text box
         protected void MakeReport(string message)
         {
-            this.Invoke(new Function(delegate ()
+            if (StatusText.InvokeRequired)
             {
-                StatusText.AppendText(message + "\r\n ");
-            }));
-
+                StatusText.Invoke(new Action(() => StatusText.AppendText(message + "\r\n")));
+            }
+            else
+            {
+                StatusText.AppendText(message + "\r\n");
+            }
         }
 
-
+        // Extract features from a fingerprint sample
         protected DPFP.FeatureSet ExtractFeatures(DPFP.Sample Sample, DPFP.Processing.DataPurpose Purpose)
         {
-
             DPFP.Processing.FeatureExtraction Extractor = new DPFP.Processing.FeatureExtraction();
-            DPFP.Capture.CaptureFeedback feedback =  DPFP.Capture.CaptureFeedback.None;
+            DPFP.Capture.CaptureFeedback feedback = DPFP.Capture.CaptureFeedback.None;
             DPFP.FeatureSet features = new DPFP.FeatureSet();
+
             Extractor.CreateFeatureSet(Sample, Purpose, ref feedback, ref features);
+
             if (feedback == DPFP.Capture.CaptureFeedback.Good)
                 return features;
             else
                 return null;
         }
 
-
-
-
-
-
+        // Event Handlers for DPFP.Capture.EventHandler
         public void OnComplete(object Capture, string ReaderSerialNumber, DPFP.Sample Sample)
         {
             MakeReport("The Finger was removed from the fingerprint reader.");
@@ -222,34 +221,23 @@ namespace BiometricsProject
                 MakeReport("The Quality of the fingerprint sample is Poor:");
         }
 
-        /*
-        private void start_scan_Click(object sender, EventArgs e)
-        {
-            timer1.Interval = 1000;
-            timer1.Start();
-        }
-        */
-
-        private bool isScanning = false; // Flag to track scan state
-
+        // Start/Stop scan with button click
         private void start_scan_Click(object sender, EventArgs e)
         {
             if (isScanning)
             {
-                // Stop the scan
-                timer1.Stop(); // Stop the timer
-                Stop(); // Call the Stop method for fingerprint processing
-                start_scan.Text = "Start Scan"; // Update button text
-                isScanning = false; // Update the state
+                timer1.Stop();
+                Stop();
+                start_scan.Text = "Start Scan";
+                isScanning = false;
             }
             else
             {
-                // Start the scan
-                timer1.Interval = 1000; // Set the timer interval
-                timer1.Start(); // Start the timer
-                Start(); // Call the Start method for fingerprint processing
-                start_scan.Text = "Stop Scan"; // Update button text
-                isScanning = true; // Update the state
+                timer1.Interval = 1000;
+                timer1.Start();
+                Start();
+                start_scan.Text = "Stop Scan";
+                isScanning = true;
             }
         }
 
@@ -280,7 +268,8 @@ namespace BiometricsProject
 
         private void StatusText_TextChanged(object sender, EventArgs e)
         {
-
+            // Leave this empty or add your desired logic here.
         }
+
     }
 }

@@ -15,19 +15,16 @@
 
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(main));
             this.splitContainer = new System.Windows.Forms.SplitContainer();
-            this.sidebarPanel = new System.Windows.Forms.Panel();
-            this.titleLabel = new System.Windows.Forms.Label();
-            this.enrol_btn = new System.Windows.Forms.Button();
-            this.verify_btn = new System.Windows.Forms.Button();
-            this.attendance_btn = new System.Windows.Forms.Button();
+            this.sidebarTreeView = new System.Windows.Forms.TreeView();
+            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.contentPanel = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
-            this.sidebarPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer
@@ -38,7 +35,8 @@
             // 
             // splitContainer.Panel1
             // 
-            this.splitContainer.Panel1.Controls.Add(this.sidebarPanel);
+            this.splitContainer.Panel1.BackColor = System.Drawing.Color.LightGray;
+            this.splitContainer.Panel1.Controls.Add(this.sidebarTreeView);
             // 
             // splitContainer.Panel2
             // 
@@ -47,77 +45,31 @@
             this.splitContainer.SplitterDistance = 270;
             this.splitContainer.TabIndex = 0;
             // 
-            // sidebarPanel
+            // sidebarTreeView
             // 
-            this.sidebarPanel.BackColor = System.Drawing.Color.LightGray;
-            this.sidebarPanel.Controls.Add(this.titleLabel);
-            this.sidebarPanel.Controls.Add(this.enrol_btn);
-            this.sidebarPanel.Controls.Add(this.verify_btn);
-            this.sidebarPanel.Controls.Add(this.attendance_btn);
-            this.sidebarPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sidebarPanel.Location = new System.Drawing.Point(0, 0);
-            this.sidebarPanel.Name = "sidebarPanel";
-            this.sidebarPanel.Size = new System.Drawing.Size(270, 467);
-            this.sidebarPanel.TabIndex = 0;
+            this.sidebarTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sidebarTreeView.Font = new System.Drawing.Font("Arial", 11F);
+            this.sidebarTreeView.FullRowSelect = true;
+            this.sidebarTreeView.ImageIndex = 0;
+            this.sidebarTreeView.ImageList = this.imageList1;
+            this.sidebarTreeView.Indent = 20;
+            this.sidebarTreeView.Location = new System.Drawing.Point(0, 0);
+            this.sidebarTreeView.Name = "sidebarTreeView";
+            this.sidebarTreeView.SelectedImageIndex = 0;
+            this.sidebarTreeView.Size = new System.Drawing.Size(270, 467);
+            this.sidebarTreeView.TabIndex = 1;
+            this.sidebarTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.sidebarTreeView_AfterSelect);
             // 
-            // titleLabel
+            // imageList1
             // 
-            this.titleLabel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.titleLabel.Font = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Bold);
-            this.titleLabel.ForeColor = System.Drawing.Color.Black;
-            this.titleLabel.Location = new System.Drawing.Point(0, 150);
-            this.titleLabel.Name = "titleLabel";
-            this.titleLabel.Size = new System.Drawing.Size(270, 50);
-            this.titleLabel.TabIndex = 3;
-            this.titleLabel.Text = "Navigation";
-            this.titleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // enrol_btn
-            // 
-            this.enrol_btn.BackColor = System.Drawing.Color.LightBlue;
-            this.enrol_btn.Dock = System.Windows.Forms.DockStyle.Top;
-            this.enrol_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.enrol_btn.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold);
-            this.enrol_btn.Location = new System.Drawing.Point(0, 100);
-            this.enrol_btn.Name = "enrol_btn";
-            this.enrol_btn.Size = new System.Drawing.Size(270, 50);
-            this.enrol_btn.TabIndex = 0;
-            this.enrol_btn.Text = "Enroll";
-            this.enrol_btn.UseVisualStyleBackColor = false;
-            this.enrol_btn.Click += new System.EventHandler(this.enrol_btn_Click);
-            // 
-            // verify_btn
-            // 
-            this.verify_btn.BackColor = System.Drawing.Color.LightGreen;
-            this.verify_btn.Dock = System.Windows.Forms.DockStyle.Top;
-            this.verify_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.verify_btn.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold);
-            this.verify_btn.Location = new System.Drawing.Point(0, 50);
-            this.verify_btn.Name = "verify_btn";
-            this.verify_btn.Size = new System.Drawing.Size(270, 50);
-            this.verify_btn.TabIndex = 1;
-            this.verify_btn.Text = "Verify";
-            this.verify_btn.UseVisualStyleBackColor = false;
-            this.verify_btn.Click += new System.EventHandler(this.verify_btn_Click);
-            // 
-            // attendance_btn
-            // 
-            this.attendance_btn.BackColor = System.Drawing.Color.LightSalmon;
-            this.attendance_btn.Dock = System.Windows.Forms.DockStyle.Top;
-            this.attendance_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.attendance_btn.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold);
-            this.attendance_btn.Location = new System.Drawing.Point(0, 0);
-            this.attendance_btn.Name = "attendance_btn";
-            this.attendance_btn.Size = new System.Drawing.Size(270, 50);
-            this.attendance_btn.TabIndex = 2;
-            this.attendance_btn.Text = "Attendance";
-            this.attendance_btn.UseVisualStyleBackColor = false;
-            this.attendance_btn.Click += new System.EventHandler(this.attendance_btn_Click);
+            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
+            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList1.Images.SetKeyName(0, "folder.png");
             // 
             // contentPanel
             // 
             this.contentPanel.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.contentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.contentPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.contentPanel.Location = new System.Drawing.Point(0, 0);
             this.contentPanel.Name = "contentPanel";
             this.contentPanel.Size = new System.Drawing.Size(813, 467);
@@ -137,17 +89,13 @@
             this.splitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
             this.splitContainer.ResumeLayout(false);
-            this.sidebarPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         private System.Windows.Forms.SplitContainer splitContainer;
-        private System.Windows.Forms.Panel sidebarPanel;
+        private System.Windows.Forms.TreeView sidebarTreeView;
         private System.Windows.Forms.Panel contentPanel;
-        private System.Windows.Forms.Button enrol_btn;
-        private System.Windows.Forms.Button verify_btn;
-        private System.Windows.Forms.Button attendance_btn;
-        private System.Windows.Forms.Label titleLabel;
+        private System.Windows.Forms.ImageList imageList1;
     }
 }

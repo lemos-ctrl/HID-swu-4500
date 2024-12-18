@@ -1,91 +1,111 @@
-﻿using Org.BouncyCastle.Crypto.Engines;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using System.Windows.Forms;
 
 namespace BiometricsProject
 {
-    delegate void Function();
     public partial class main : Form
     {
-
         private DPFP.Template Template;
+
         public main()
         {
             InitializeComponent();
+            InitializeSidebarItems(); // Populate the sidebar
+            LoadDefaultContent(); // Load Home content by default
         }
 
-        private void OnTemplate(DPFP.Template template)
+        private void InitializeSidebarItems()
         {
-            this.Invoke(new Function(delegate ()
-            {
-                Template = template; 
+            // Create TreeView nodes with image index
+            TreeNode homeNode = new TreeNode("Home", 0, 0); // Folder icon for Home
+            TreeNode attendanceNode = new TreeNode("Attendance", 0, 0);
+            TreeNode userManagementNode = new TreeNode("User Management", 0, 0);
+            TreeNode helpNode = new TreeNode("Help", 0, 0);
+            TreeNode exitNode = new TreeNode("Exit", 0, 0);
 
-                if (Template != null)
-                {
-                    MessageBox.Show("The fingerprint template is ready for fingerprint verification", "Fingerprint Enrollment");
-                }
-                else
-                {
-                    MessageBox.Show("The FIngerprint template is not valid. Repeat fingerprint scanning", "Fingerprint Enrollment");
-                }
-            }));
+            // Add child nodes for User Management with file icons
+            userManagementNode.Nodes.Add(new TreeNode("Verify", 1, 1)); // Sub-folder/file icon
+            userManagementNode.Nodes.Add(new TreeNode("Enroll", 1, 1));
+
+            // Add child nodes for Help
+            helpNode.Nodes.Add(new TreeNode("Documentation", 1, 1));
+            helpNode.Nodes.Add(new TreeNode("About", 1, 1));
+
+            // Add nodes to the TreeView
+            sidebarTreeView.Nodes.Add(homeNode);
+            sidebarTreeView.Nodes.Add(attendanceNode);
+            sidebarTreeView.Nodes.Add(userManagementNode);
+            sidebarTreeView.Nodes.Add(helpNode);
+            sidebarTreeView.Nodes.Add(exitNode);
+
+            sidebarTreeView.ExpandAll();
+
+            // Select the Home node by default
+            sidebarTreeView.SelectedNode = homeNode;
         }
 
-        /*
-        private void enrol_btn_Click(object sender, EventArgs e)
-        {
-            enroll EnFrm = new enroll();
-            EnFrm.OnTemplate += this.OnTemplate;
-            EnFrm.Show();
-        }
-        */
 
-        private void LoadContent(UserControl control)
+        private void LoadDefaultContent()
         {
-            // Clear any existing controls in the contentPanel
+            // Load Home content by default
+            LoadContent(new HomeControl()); // Ensure you have a HomeControl implemented
+        }
+
+        private void LoadContent(Control control)
+        {
             contentPanel.Controls.Clear();
-
-            // Add the new control and make it fill the panel
             control.Dock = DockStyle.Fill;
             contentPanel.Controls.Add(control);
         }
 
-        private void enrol_btn_Click(object sender, EventArgs e)
+        private void sidebarTreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            var wrapper = new EnrollControlWrapper();
-            LoadContent(wrapper); // Load the wrapper into the contentPanel
-        }
+            string selectedNode = e.Node.Text;
 
+            switch (selectedNode)
+            {
+                case "Home":
+                    LoadContent(new HomeControl()); // Load Home content
+                    break;
 
+                case "Attendance":
+                    attendance AtFrm = new attendance();
+                    AtFrm.ShowDialog(); // Opens Attendance as a modal dialog
+                    break;
 
-        /*
-        private void verify_btn_Click(object sender, EventArgs e)
-        {
-            verify VeFrm = new verify();
-            VeFrm.Verify(Template);
-        }
-        */
+                case "Verify":
+                    var verifyWrapper = new VerifyControlWrapper(Template);
+                    LoadContent(verifyWrapper);
+                    break;
 
-        private void verify_btn_Click(object sender, EventArgs e)
-        {
-            // Pass the template to VerifyControlWrapper
-            var wrapper = new VerifyControlWrapper(Template);
-            LoadContent(wrapper); // Load the wrapper into the contentPanel
-        }
+                case "Enroll":
+                    var enrollWrapper = new EnrollControlWrapper();
+                    LoadContent(enrollWrapper);
+                    break;
 
+                case "Settings":
+                    MessageBox.Show("Settings panel goes here!", "Settings");
+                    break;
 
+                case "Documentation":
+                    MessageBox.Show("Documentation content goes here!", "Help");
+                    break;
 
-        private void attendance_btn_Click(object sender, EventArgs e)
-        {
-            attendance AtFrm = new attendance();
-            AtFrm.Show();
+                case "About":
+                    MessageBox.Show("SWU-SHS AMS Biometrics System\nVersion 1.0", "About");
+                    break;
+
+                case "Exit":
+                    Application.Exit();
+                    break;
+
+                default:
+                    MessageBox.Show("Option not implemented yet!", "Information");
+                    break;
+            }
+
+            // Reset the selected node to ensure AfterSelect triggers on re-click
+            sidebarTreeView.SelectedNode = null;
         }
 
     }
